@@ -17,5 +17,5 @@
     "skipLibCheck": true
   },
   "exclude": ["node_modules"],
-  "include": ["vite.config.*", "env.d.ts", "./**/*.vue", "**/*.tsx","**/*.ts"]
+  "include": [ "index.ts", "./**/*.vue", "**/*.tsx","**/*.ts"]
 }

@@ -16,6 +16,7 @@
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
     "skipLibCheck": true
   },
-  "exclude": ["node_modules"],
-  "include": ["vite.config.*", "env.d.ts", "./**/*.vue", "**/*.tsx","**/*.ts"]
+  "exclude": [
+    "node_modules"
+  ],
 }

@@ -1,0 +1,1 @@
+export { ProWave } from "./wave";
