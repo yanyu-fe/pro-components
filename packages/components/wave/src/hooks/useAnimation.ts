@@ -25,7 +25,12 @@ export const useBindAnimation = (node?: Element) => {
   });
 };
 
+const checkWaveColor = (color:string) => {
+
+}
+
+
 /**
  * 触发点击事件的操作
  */
-const useOnClick = () => {};
+// const useOnClick = () => {};

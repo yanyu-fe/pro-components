@@ -9,10 +9,11 @@ export default defineComponent({
     onMounted(() => {
       // 拿到当前的实例
       node = useGetInstance();
+      // 绑定监听
       useBindAnimation(node as Element);
     });
     return () => {
-      return <>{slots.default && slots.default()}</>;
+      return slots.default && slots.default();
     };
   },
 });
