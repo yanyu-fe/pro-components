@@ -1,18 +1,25 @@
-import { computed, getCurrentInstance, onUnmounted, ref } from "vue";
+import { computed, onUnmounted, ref } from "vue";
 import raf from "../raf";
 // @ts-ignore
 import TransitionEvents from "../css-animation/Event";
 import { useGetInstance } from "./useGetInstance";
+import { ComponentInternalInstance } from "@vue/runtime-core";
 const clickWaveAnimateId = ref();
 const animationStart = ref(false);
 const animationStartId = ref();
+const instanceRef = ref();
 const isHidden = (el: any) => {
   return !el || el.offsetParent === null;
 };
 
 export type waveProps = { insertExtraNode: any };
 
-export const useBindAnimation = (props: waveProps, node?: Element) => {
+export const useBindAnimation = (
+  instance: ComponentInternalInstance | null,
+  props: waveProps,
+  node?: Element
+) => {
+  instanceRef.value = instance;
   // 判断事件是否存在
   if (
     !node ||
@@ -32,9 +39,9 @@ export const useBindAnimation = (props: waveProps, node?: Element) => {
     resetEffect(node);
     // 获取颜色信息
     const waveColor =
+      getComputedStyle(node).getPropertyValue("background-color") ||
       getComputedStyle(node).getPropertyValue("border-top-color") || // Firefox Compatible
-      getComputedStyle(node).getPropertyValue("border-color") ||
-      getComputedStyle(node).getPropertyValue("background-color");
+      getComputedStyle(node).getPropertyValue("border-color");
     clickWaveAnimateId.value = setTimeout(
       () => useOnClick(props, node, waveColor),
       0
@@ -77,16 +84,15 @@ export const useBindAnimation = (props: waveProps, node?: Element) => {
    * 动画开始
    * @param e
    */
-  const onTransitionStart = (e?: Element) => {
-    const instance = getCurrentInstance();
-    if (instance?.isMounted) return;
-    const node = useGetInstance();
-    if (!e || (e as any).target !== node) {
+  const onTransitionStart = (e?: AnimationEvent) => {
+    if (instance?.isUnmounted) return;
+    const instance1 = useGetInstance(instance);
+    if (!e || e.target !== instance1.node) {
       return;
     }
     if (animationStart.value) {
       // 重置
-      resetEffect(node as Element);
+      resetEffect(instance1.node as Element);
     }
   };
 
@@ -94,8 +100,8 @@ export const useBindAnimation = (props: waveProps, node?: Element) => {
    * 监听动画结束
    * @param e
    */
-  const onTransitionEnd = (e?: Element) => {
-    if (!e || (e as any).animationName !== "fadeEffect") {
+  const onTransitionEnd = (e?: AnimationEvent) => {
+    if (!e || e.animationName !== "fadeEffect") {
       return;
     }
     // 重置动画
@@ -131,7 +137,7 @@ export const useBindAnimation = (props: waveProps, node?: Element) => {
       myExtraNode.style.borderColor = waveColor;
       styleForPesudo.value.innerHTML = `
       [pro-click-animating-without-extra-node='true']::after, .pro-click-animating-node {
-          --antd-wave-shadow-color: ${waveColor};
+          --pro-wave-shadow-color: ${waveColor};
       }`;
       if (!document.body.contains(styleForPesudo.value)) {
         document.body.appendChild(styleForPesudo.value);
@@ -163,7 +169,7 @@ const isNotGrey = (color: string): boolean => {
  * @param color
  */
 const checkWaveColor = (color: string): boolean => {
-  return !(
+  return !!(
     color &&
     color !== "#ffffff" &&
     color !== "rgb(255,255,255)" &&

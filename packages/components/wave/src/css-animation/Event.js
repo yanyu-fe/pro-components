@@ -53,6 +53,7 @@ function detectEvents() {
 
   function process(EVENT_NAME_MAP, events) {
     for (const baseEventName in EVENT_NAME_MAP) {
+      // eslint-disable-next-line no-prototype-builtins
       if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
         const baseEvents = EVENT_NAME_MAP[baseEventName];
         for (const styleName in baseEvents) {

@@ -25,7 +25,6 @@ html{
   left: 0;
   display: block;
   border-radius: inherit;
-  //box-shadow: 0 0 0 0 @primary-color;
   box-shadow: 0 0 0 0 var(--pro-wave-shadow-color);
   opacity: .2;
   animation:fadeEffect 2s @ease-out-circ , waveEffect .4s @ease-out-circ;
@@ -36,8 +35,7 @@ html{
 
 @keyframes waveEffect {
   100%{
-    //box-shadow: 0 0 0 0 @primary-color;
-    box-shadow: 0 0 0 0 @wave-animation-width var(--pro-wave-shadow-color);
+    box-shadow: 0 0 0 @wave-animation-width var(--pro-wave-shadow-color);
   }
 }
 
