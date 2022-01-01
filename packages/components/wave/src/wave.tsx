@@ -35,8 +35,13 @@ export default defineComponent({
     });
 
     onBeforeUnmount(() => {
+      // 判断实例是否存在
       if (instance) {
         instance.cancel();
+      }
+      // 判断定时器是否存在
+      if (clickWaveTimeoutId.value) {
+        clearTimeout(clickWaveTimeoutId.value);
       }
     });
 
